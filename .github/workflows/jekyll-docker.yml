@@ -14,12 +14,14 @@ jobs:
       - name: Download source code
         uses: actions/checkout@v4
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
       - name: Build website
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}:/srv/jekyll" \
-            jekyll/builder:latest \
-            /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+        run: bundle exec jekyll build --future --trace
 
       - name: Save website output
         uses: actions/upload-artifact@v4
